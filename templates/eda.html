@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GlucoTrend - EDA</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <h1>🩺 GlucoTrend - Exploratory Data Analysis</h1>
+
+</header>
+
+
+<div class="layout">
+
+
+    <!-- SIDEBAR -->
+
+    <nav class="sidebar">
+
+        <ul>
+
+            <li>
+
+                <a href="{{ url_for('index') }}"
+                   class="menu-item">
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="{{ url_for('data_loading') }}"
+                   class="menu-item">
+
+                    Data Loading
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="{{ url_for('eda_page') }}"
+                   class="menu-item active">
+
+                    Exploratory Data Analysis
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <span class="menu-item disabled">
+
+                    Data Preprocessing
+
+                </span>
+
+            </li>
+
+
+            <li>
+
+                <span class="menu-item disabled">
+
+                    Feature Engineering
+
+                </span>
+
+            </li>
+
+
+            <li>
+
+                <span class="menu-item disabled">
+
+                    Model Training
+
+                </span>
+
+            </li>
+
+
+            <li>
+
+                <span class="menu-item disabled">
+
+                    Prediction
+
+                </span>
+
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="content">
+
+        <h2>Exploratory Data Analysis</h2>
+
+        <p class="page-description">
+
+            The following analysis explores the structure,
+            quality, distribution and relationships within
+            the GlucoTrend dataset.
+
+        </p>
+
+
+        {% if error %}
+
+            <div class="error">
+
+                {{ error }}
+
+            </div>
+
+        {% endif %}
+
+
+        {% if results %}
+
+
+        <!-- DATASET SUMMARY -->
+
+        <div class="summary-cards">
+
+            <div class="summary-card">
+
+                <h3>{{ results.n_rows }}</h3>
+
+                <p>Total Rows</p>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <h3>{{ results.n_cols }}</h3>
+
+                <p>Total Columns</p>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <h3>{{ results.duplicate_count }}</h3>
+
+                <p>Duplicate Rows</p>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <h3>{{ results.charts|length }}</h3>
+
+                <p>Charts Generated</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- EDA SECTIONS -->
+
+        {% for section in results.eda_sections %}
+
+        <section class="eda-card">
+
+
+            <div class="eda-header">
+
+                <span class="eda-number">
+
+                    {{ section.number }}
+
+                </span>
+
+                <h3>
+
+                    {{ section.title }}
+
+                </h3>
+
+            </div>
+
+
+            <p class="eda-description">
+
+                {{ section.description }}
+
+            </p>
+
+
+            {% if section.chart %}
+
+            <div class="chart-container">
+
+                <img
+                    src="{{ url_for(
+                        'static',
+                        filename='charts/' + section.chart
+                    ) }}"
+                    alt="{{ section.title }} chart"
+                    class="eda-chart"
+                >
+
+            </div>
+
+            {% else %}
+
+            <div class="no-chart">
+
+                <p>
+                    This analysis is displayed in the console.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+
+        </section>
+
+        {% endfor %}
+
+
+        {% endif %}
+
+    </main>
+
+</div>
+
+</body>
+
+</html>
