@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GlucoTrend AI Healthcare Analytics</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+    <h1>🩺 GlucoTrend AI Healthcare Analytics</h1>
+
+</header>
+
+
+
+
+<div class="layout">
+
+
+    <!-- Sidebar -->
+
+    <nav class="sidebar">
+
+    <ul>
+
+        <li>
+            <a href="{{ url_for('index') }}"
+               class="menu-item {% if active == 'none' %}active{% endif %}">
+                Dashboard
+            </a>
+        </li>
+
+
+        <li>
+            <a href="{{ url_for('data_loading') }}"
+               class="menu-item {% if active == 'data-loading' %}active{% endif %}">
+                Data Loading
+            </a>
+        </li>
+
+
+        <li>
+            <a href="{{ url_for('eda_page') }}"
+               class="menu-item {% if active == 'eda' %}active{% endif %}">
+                Exploratory Data Analysis
+            </a>
+        </li>
+
+
+        <li>
+            <span class="menu-item disabled">
+                Data Preprocessing
+            </span>
+        </li>
+
+
+        <li>
+            <span class="menu-item disabled">
+                Feature Engineering
+            </span>
+        </li>
+
+
+        <li>
+            <span class="menu-item disabled">
+                Model Training
+            </span>
+        </li>
+
+
+        <li>
+            <span class="menu-item disabled">
+                Prediction
+            </span>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+
+
+
+    <!-- Main Content -->
+
+    <main class="content">
+
+
+        {% if active == 'none' %}
+
+
+        <div class="welcome-card dashboard-message">
+
+
+            <h2>
+
+                Welcome to GlucoTrend 🩺
+
+            </h2>
+
+
+
+            <p>
+
+                Please select an option from the left sidebar
+                to view your selected analysis.
+
+            </p>
+
+
+
+
+            <div class="instruction-box">
+
+
+                <h3>
+
+                    Available Modules
+
+                </h3>
+
+
+                <ul>
+
+
+                    <li>
+
+                        📂 Data Loading -
+                        View dataset information and structure
+
+                    </li>
+
+
+                    <li>
+
+                        📊 EDA -
+                        Explore patterns and insights
+
+                    </li>
+
+
+                    <li>
+
+                        ⚙️ Preprocessing -
+                        Prepare data for AI models
+
+                    </li>
+
+
+                    <li>
+
+                        🤖 Model Training -
+                        Build prediction models
+
+                    </li>
+
+
+                    <li>
+
+                        🔮 Prediction -
+                        Predict healthcare outcomes
+
+                    </li>
+
+
+                </ul>
+
+
+            </div>
+
+
+
+        </div>
+
+
+        {% endif %}
+
+
+
+    </main>
+
+
+
+</div>
+
+
+
+
+</body>
+
+</html>
