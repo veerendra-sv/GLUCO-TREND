@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlucoTrend - Random Forest</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+    <h1>🩺 GlucoTrend AI Healthcare Analytics</h1>
+    <span class="trace-divider">
+        <svg viewBox="0 0 900 26" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0,18 L60,18 L85,6 L110,22 L140,10 L170,18 L230,18 L255,4 L280,20 L310,14 L340,18 L410,18 L435,8 L460,20 L495,12 L520,18 L590,18 L615,3 L640,22 L670,9 L700,18 L770,18 L795,7 L820,19 L850,13 L900,18" />
+        </svg>
+    </span>
+</header>
+
+<div class="layout">
+    <nav class="sidebar">
+        <ul>
+            <li><a href="{{ url_for('index') }}" class="menu-item">Dashboard</a></li>
+            <li><a href="{{ url_for('data_loading') }}" class="menu-item">Data Loading</a></li>
+            <li><a href="{{ url_for('eda_page') }}" class="menu-item">Exploratory Data Analysis</a></li>
+            <li><a href="{{ url_for('preprocessing') }}" class="menu-item">Data Preprocessing</a></li>
+            <li><a href="{{ url_for('linear_regression') }}" class="menu-item">Linear Regression</a></li>
+            <li><a href="{{ url_for('logistic_regression') }}" class="menu-item">Logistic Regression</a></li>
+            <li><a href="{{ url_for('decision_tree') }}" class="menu-item">Decision Tree</a></li>
+            <li><a href="{{ url_for('random_forest') }}" class="menu-item active">Random Forest</a></li>
+            <li><a href="{{ url_for('bagging') }}" class="menu-item">Bagging</a></li>
+            <li><a href="{{ url_for('boosting') }}" class="menu-item">Boosting</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <h2>🌲 Random Forest Classifier</h2>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        {% if result and not error %}
+            <div class="card">
+                <h3>Model Performance Metrics</h3>
+                <table class="summary-table">
+                    <tr><td>Target Classification</td><td><strong>{{ result.target }}</strong></td></tr>
+                    <tr><td>Training Samples</td><td>{{ result.training_samples }}</td></tr>
+                    <tr><td>Testing Samples</td><td>{{ result.testing_samples }}</td></tr>
+                    <tr><td>Accuracy</td><td><strong style="color: #4caf50; font-size: 1.2rem;">{{ result.accuracy }}%</strong></td></tr>
+                    <tr><td>Precision</td><td>{{ result.precision }}%</td></tr>
+                    <tr><td>Recall</td><td>{{ result.recall }}%</td></tr>
+                    <tr><td>F1-Score</td><td>{{ result.f1_score }}%</td></tr>
+                </table>
+            </div>
+
+            {% if result.feature_importance %}
+            <div class="card">
+                <h3>Feature Importance Weights</h3>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Feature</th><th>Importance Weight</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for feature, imp in result.feature_importance.items() %}
+                                <tr><td>{{ feature }}</td><td>{{ imp }}</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+        {% endif %}
+    </main>
+</div>
+
+</body>
+</html>

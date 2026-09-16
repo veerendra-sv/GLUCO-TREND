@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlucoTrend - Logistic Regression</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+    <h1>🩺 GlucoTrend AI Healthcare Analytics</h1>
+    <span class="trace-divider">
+        <svg viewBox="0 0 900 26" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0,18 L60,18 L85,6 L110,22 L140,10 L170,18 L230,18 L255,4 L280,20 L310,14 L340,18 L410,18 L435,8 L460,20 L495,12 L520,18 L590,18 L615,3 L640,22 L670,9 L700,18 L770,18 L795,7 L820,19 L850,13 L900,18" />
+        </svg>
+    </span>
+</header>
+
+<div class="layout">
+    <nav class="sidebar">
+        <ul>
+            <li><a href="{{ url_for('index') }}" class="menu-item">Dashboard</a></li>
+            <li><a href="{{ url_for('data_loading') }}" class="menu-item">Data Loading</a></li>
+            <li><a href="{{ url_for('eda_page') }}" class="menu-item">Exploratory Data Analysis</a></li>
+            <li><a href="{{ url_for('preprocessing') }}" class="menu-item">Data Preprocessing</a></li>
+            <li><a href="{{ url_for('linear_regression') }}" class="menu-item">Linear Regression</a></li>
+            <li><a href="{{ url_for('logistic_regression') }}" class="menu-item active">Logistic Regression</a></li>
+            <li><a href="{{ url_for('decision_tree') }}" class="menu-item">Decision Tree</a></li>
+            <li><a href="{{ url_for('random_forest') }}" class="menu-item">Random Forest</a></li>
+            <li><a href="{{ url_for('bagging') }}" class="menu-item">Bagging</a></li>
+            <li><a href="{{ url_for('boosting') }}" class="menu-item">Boosting</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <h2>📊 Logistic Regression Classifier</h2>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        {% if logistic and not error %}
+            <div class="card">
+                <h3>Model Classification Overview</h3>
+                <table class="summary-table">
+                    <tr><td>Target Classification</td><td><strong>{{ logistic.target }}</strong></td></tr>
+                    <tr><td>Training Samples</td><td>{{ logistic.train_rows }}</td></tr>
+                    <tr><td>Testing Samples</td><td>{{ logistic.test_rows }}</td></tr>
+                    <tr><td>Overall Accuracy</td><td><strong style="color: #4caf50; font-size: 1.2rem;">{{ logistic.accuracy }}%</strong></td></tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Confusion Matrix</h3>
+                <div class="table-wrapper">
+                    <table class="data-table" style="max-width: 400px; text-align: center;">
+                        <thead>
+                            <tr>
+                                <th>Actual \ Predicted</th>
+                                {% for cls in logistic.classes %}
+                                    <th>{{ cls }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row_idx in range(logistic.confusion_matrix|length) %}
+                                <tr>
+                                    <td><strong>{{ logistic.classes[row_idx] }}</strong></td>
+                                    {% for col in logistic.confusion_matrix[row_idx] %}
+                                        <td>{{ col }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Classification Report</h3>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Precision</th>
+                                <th>Recall</th>
+                                <th>F1-Score</th>
+                                <th>Support</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cls_name, metrics in logistic.classification_report.items() %}
+                                {% if cls_name not in ['accuracy', 'macro avg', 'weighted avg'] %}
+                                    <tr>
+                                        <td><strong>{{ cls_name }}</strong></td>
+                                        <td>{{ (metrics['precision'] * 100)|round(2) }}%</td>
+                                        <td>{{ (metrics['recall'] * 100)|round(2) }}%</td>
+                                        <td>{{ (metrics['f1-score'] * 100)|round(2) }}%</td>
+                                        <td>{{ metrics['support'] }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlucoTrend - Linear Regression</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+    <h1>🩺 GlucoTrend AI Healthcare Analytics</h1>
+    <span class="trace-divider">
+        <svg viewBox="0 0 900 26" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0,18 L60,18 L85,6 L110,22 L140,10 L170,18 L230,18 L255,4 L280,20 L310,14 L340,18 L410,18 L435,8 L460,20 L495,12 L520,18 L590,18 L615,3 L640,22 L670,9 L700,18 L770,18 L795,7 L820,19 L850,13 L900,18" />
+        </svg>
+    </span>
+</header>
+
+<div class="layout">
+    <nav class="sidebar">
+        <ul>
+            <li><a href="{{ url_for('index') }}" class="menu-item">Dashboard</a></li>
+            <li><a href="{{ url_for('data_loading') }}" class="menu-item">Data Loading</a></li>
+            <li><a href="{{ url_for('eda_page') }}" class="menu-item">Exploratory Data Analysis</a></li>
+            <li><a href="{{ url_for('preprocessing') }}" class="menu-item">Data Preprocessing</a></li>
+            <li><a href="{{ url_for('linear_regression') }}" class="menu-item active">Linear Regression</a></li>
+            <li><a href="{{ url_for('logistic_regression') }}" class="menu-item">Logistic Regression</a></li>
+            <li><a href="{{ url_for('decision_tree') }}" class="menu-item">Decision Tree</a></li>
+            <li><a href="{{ url_for('random_forest') }}" class="menu-item">Random Forest</a></li>
+            <li><a href="{{ url_for('bagging') }}" class="menu-item">Bagging</a></li>
+            <li><a href="{{ url_for('boosting') }}" class="menu-item">Boosting</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <h2>📈 Linear Regression & Batch Gradient Descent</h2>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        {% if regression and not error %}
+            <div class="card">
+                <h3>Model Metrics</h3>
+                <table class="summary-table">
+                    <tr><td>Target Variable</td><td><strong>{{ regression.target }}</strong></td></tr>
+                    <tr><td>Training Samples</td><td>{{ regression.train_samples }}</td></tr>
+                    <tr><td>Testing Samples</td><td>{{ regression.test_samples }}</td></tr>
+                    <tr><td>Mean Squared Error (MSE)</td><td>{{ regression.metrics.mse }}</td></tr>
+                    <tr><td>Root Mean Squared Error (RMSE)</td><td>{{ regression.metrics.rmse }}</td></tr>
+                    <tr><td>Mean Absolute Error (MAE)</td><td>{{ regression.metrics.mae }}</td></tr>
+                    <tr><td>R² Score</td><td><strong>{{ regression.metrics.r2_score }}</strong></td></tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Gradient Descent Loss & Performance Visualizations</h3>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    {% if regression.charts.mse_history %}
+                        <div>
+                            <h4>MSE Loss Curve</h4>
+                            <img src="{{ url_for('static', filename='charts/' + regression.charts.mse_history) }}" alt="Loss Curve" style="max-width: 100%; border-radius: 8px;">
+                        </div>
+                    {% endif %}
+                    {% if regression.charts.actual_vs_pred %}
+                        <div>
+                            <h4>Actual vs Predicted Blood Glucose</h4>
+                            <img src="{{ url_for('static', filename='charts/' + regression.charts.actual_vs_pred) }}" alt="Actual vs Pred" style="max-width: 100%; border-radius: 8px;">
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Model Coefficients</h3>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Feature</th><th>Coefficient</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><em>Intercept (bias)</em></td><td>{{ regression.intercept }}</td></tr>
+                            {% for feature, coef in regression.coefficients.items() %}
+                                <tr><td>{{ feature }}</td><td>{{ coef }}</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </main>
+</div>
+
+</body>
+</html>
