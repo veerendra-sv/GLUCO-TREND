@@ -9,6 +9,13 @@ from Standard_Scaler import run_standard_scaling
 
 import gluco_eda
 
+from linear_regression import run_linear_regression
+from logistic_regression import run_logistic_regression
+from decision_tree import run_decision_tree
+from random_forest import run_random_forest
+from bagging import run_bagging
+from boosting import run_boosting
+
 
 app = Flask(__name__)
 
@@ -19,7 +26,6 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-
     return render_template(
         "index.html",
         active="none"
@@ -32,15 +38,11 @@ def index():
 
 @app.route("/data-loading")
 def data_loading():
-
     try:
-
         print("\n" + "=" * 70)
         print("                 LOADING GLUCO TREND DATASET")
         print("=" * 70)
-
-        print("\nDataset Path:")
-        print(DATA_PATH)
+        print("\nDataset Path:", DATA_PATH)
 
         summary = get_data_summary()
 
@@ -54,9 +56,7 @@ def data_loading():
         )
 
     except Exception as e:
-
         traceback.print_exc()
-
         return render_template(
             "data_loading.html",
             active="data-loading",
@@ -70,11 +70,8 @@ def data_loading():
 
 @app.route("/eda")
 def eda_page():
-
     try:
-
         results = gluco_eda.run_eda()
-
         return render_template(
             "eda.html",
             active="eda",
@@ -82,9 +79,7 @@ def eda_page():
         )
 
     except Exception as e:
-
         traceback.print_exc()
-
         return render_template(
             "eda.html",
             active="eda",
@@ -98,88 +93,31 @@ def eda_page():
 
 @app.route("/preprocessing")
 def preprocessing():
-
     try:
-
-        print("\n")
-        print("=" * 70)
+        print("\n" + "=" * 70)
         print("          GLUCO TREND PREPROCESSING PIPELINE")
         print("=" * 70)
 
-        # STEP 1 - LOAD DATA
-        print("\nSTEP 1 : Loading dataset...")
-
         df = load_data()
 
-        print("\nOriginal Dataset Shape:", df.shape)
-
-        # STEP 2 - MIN-MAX SCALING
-        print("\nSTEP 2 : Min-Max Scaling...")
-
         train_df, test_df, minmax_scaler = run_minmax_scaling(df)
+        train_df, test_df, ohe = run_onehot_encoding(train_df, test_df)
+        train_df, test_df, ordinal_encoder = run_ordinal_encoding(train_df, test_df)
+        train_df, test_df, standard_scaler = run_standard_scaling(train_df, test_df)
 
-        # STEP 3 - ONE-HOT ENCODING
-        print("\nSTEP 3 : One-Hot Encoding...")
-
-        train_df, test_df, ohe = run_onehot_encoding(
-            train_df,
-            test_df
-        )
-
-        # STEP 4 - ORDINAL ENCODING
-        print("\nSTEP 4 : Ordinal Encoding...")
-
-        train_df, test_df, ordinal_encoder = run_ordinal_encoding(
-            train_df,
-            test_df
-        )
-
-        # STEP 5 - STANDARD SCALING
-        print("\nSTEP 5 : Standard Scaling...")
-
-        train_df, test_df, standard_scaler = run_standard_scaling(
-            train_df,
-            test_df
-        )
-
-        # TARGET COLUMN
         target_column = "glucose"
-
         if target_column not in train_df.columns:
-            raise ValueError(
-                "Target column 'glucose' was not found in the dataset."
-            )
+            raise ValueError("Target column 'glucose' was not found in the dataset.")
 
         y_train = train_df[target_column].copy()
         y_test = test_df[target_column].copy()
 
-        # REMOVE NON-FEATURE COLUMNS
         columns_to_remove = [
-            "glucose",
-            "timestamp",
-            "user_id",
-            "glucose_roll_mean_1h"
+            "glucose", "timestamp", "user_id", "glucose_roll_mean_1h"
         ]
 
-        X_train = train_df.drop(
-            columns=columns_to_remove,
-            errors="ignore"
-        )
-
-        X_test = test_df.drop(
-            columns=columns_to_remove,
-            errors="ignore"
-        )
-
-        print("\n")
-        print("=" * 70)
-        print("       PREPROCESSING COMPLETED SUCCESSFULLY")
-        print("=" * 70)
-
-        print("\nX_train Shape:", X_train.shape)
-        print("X_test Shape:", X_test.shape)
-        print("y_train Shape:", y_train.shape)
-        print("y_test Shape:", y_test.shape)
+        X_train = train_df.drop(columns=columns_to_remove, errors="ignore")
+        X_test = test_df.drop(columns=columns_to_remove, errors="ignore")
 
         return render_template(
             "preprocessing.html",
@@ -191,20 +129,12 @@ def preprocessing():
             target_train_shape=y_train.shape,
             target_test_shape=y_test.shape,
             feature_count=X_train.shape[1],
-            train_preview=X_train.head(10).to_html(
-                classes="data-table",
-                index=False
-            ),
-            test_preview=X_test.head(10).to_html(
-                classes="data-table",
-                index=False
-            )
+            train_preview=X_train.head(10).to_html(classes="data-table", index=False),
+            test_preview=X_test.head(10).to_html(classes="data-table", index=False)
         )
 
     except Exception as e:
-
         traceback.print_exc()
-
         return render_template(
             "preprocessing.html",
             active="preprocessing",
@@ -214,11 +144,154 @@ def preprocessing():
 
 
 # ==========================================================
+# LINEAR REGRESSION
+# ==========================================================
+
+@app.route("/linear-regression")
+def linear_regression():
+    try:
+        result = run_linear_regression()
+        return render_template(
+            "linear_regression.html",
+            active="linear-regression",
+            regression=result,
+            error=result.get("error")
+        )
+    except Exception as e:
+        traceback.print_exc()
+        return render_template(
+            "linear_regression.html",
+            active="linear-regression",
+            regression=None,
+            error=str(e)
+        )
+
+
+# ==========================================================
+# LOGISTIC REGRESSION
+# ==========================================================
+
+@app.route("/logistic-regression")
+def logistic_regression():
+    try:
+        result = run_logistic_regression()
+        return render_template(
+            "logistic_regression.html",
+            active="logistic-regression",
+            logistic=result,
+            error=result.get("error")
+        )
+    except Exception as e:
+        traceback.print_exc()
+        return render_template(
+            "logistic_regression.html",
+            active="logistic-regression",
+            logistic=None,
+            error=str(e)
+        )
+
+
+# ==========================================================
+# DECISION TREE
+# ==========================================================
+
+@app.route("/decision-tree")
+def decision_tree():
+    try:
+        result = run_decision_tree()
+        return render_template(
+            "decision_tree.html",
+            active="decision-tree",
+            result=result,
+            error=result.get("error")
+        )
+    except Exception as e:
+        traceback.print_exc()
+        return render_template(
+            "decision_tree.html",
+            active="decision-tree",
+            result=None,
+            error=str(e)
+        )
+
+
+# ==========================================================
+# RANDOM FOREST
+# ==========================================================
+
+@app.route("/random-forest")
+def random_forest():
+    try:
+        result = run_random_forest()
+        return render_template(
+            "random_forest.html",
+            active="random-forest",
+            result=result,
+            error=result.get("error")
+        )
+    except Exception as e:
+        traceback.print_exc()
+        return render_template(
+            "random_forest.html",
+            active="random-forest",
+            result=None,
+            error=str(e)
+        )
+
+
+# ==========================================================
+# BAGGING
+# ==========================================================
+
+@app.route("/bagging")
+def bagging():
+    try:
+        result = run_bagging()
+        return render_template(
+            "bagging.html",
+            active="bagging",
+            result=result,
+            error=result.get("error")
+        )
+    except Exception as e:
+        traceback.print_exc()
+        return render_template(
+            "bagging.html",
+            active="bagging",
+            result=None,
+            error=str(e)
+        )
+
+
+# ==========================================================
+# BOOSTING
+# ==========================================================
+
+@app.route("/boosting")
+def boosting():
+    try:
+        result = run_boosting()
+        return render_template(
+            "boosting.html",
+            active="boosting",
+            result=result,
+            error=result.get("error")
+        )
+    except Exception as e:
+        traceback.print_exc()
+        return render_template(
+            "boosting.html",
+            active="boosting",
+            result=None,
+            error=str(e)
+        )
+
+
+# ==========================================================
 # RUN APPLICATION
 # ==========================================================
 
 if __name__ == "__main__":
-
     app.run(
         host="127.0.0.1",
         port=5000,

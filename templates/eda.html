@@ -36,91 +36,18 @@
     <!-- SIDEBAR -->
 
     <nav class="sidebar">
-
         <ul>
-
-            <li>
-
-                <a href="{{ url_for('index') }}"
-                   class="menu-item">
-
-                    Dashboard
-
-                </a>
-
-            </li>
-
-
-            <li>
-
-                <a href="{{ url_for('data_loading') }}"
-                   class="menu-item">
-
-                    Data Loading...............
-
-                </a>
-
-            </li>
-
-
-            <li>
-
-                <a href="{{ url_for('eda_page') }}"
-                   class="menu-item active">
-
-                    Exploratory Data Analysis
-
-                </a>
-
-            </li>
-
-
-            <li>
-
-                <a href="{{ url_for('preprocessing') }}"
-                   class="menu-item">
-
-                    Data Preprocessing
-
-                </a>
-
-            </li>
-
-
-            <li>
-
-                <span class="menu-item disabled">
-
-                    Feature Engineering
-
-                </span>
-
-            </li>
-
-
-            <li>
-
-                <span class="menu-item disabled">
-
-                    Model Training
-
-                </span>
-
-            </li>
-
-
-            <li>
-
-                <span class="menu-item disabled">
-
-                    Prediction
-
-                </span>
-
-            </li>
-
+            <li><a href="{{ url_for('index') }}" class="menu-item">Dashboard</a></li>
+            <li><a href="{{ url_for('data_loading') }}" class="menu-item">Data Loading</a></li>
+            <li><a href="{{ url_for('eda_page') }}" class="menu-item active">Exploratory Data Analysis</a></li>
+            <li><a href="{{ url_for('preprocessing') }}" class="menu-item">Data Preprocessing</a></li>
+            <li><a href="{{ url_for('linear_regression') }}" class="menu-item">Linear Regression</a></li>
+            <li><a href="{{ url_for('logistic_regression') }}" class="menu-item">Logistic Regression</a></li>
+            <li><a href="{{ url_for('decision_tree') }}" class="menu-item">Decision Tree</a></li>
+            <li><a href="{{ url_for('random_forest') }}" class="menu-item">Random Forest</a></li>
+            <li><a href="{{ url_for('bagging') }}" class="menu-item">Bagging</a></li>
+            <li><a href="{{ url_for('boosting') }}" class="menu-item">Boosting</a></li>
         </ul>
-
     </nav>
 
 

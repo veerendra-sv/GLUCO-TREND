@@ -1,211 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>GlucoTrend AI Healthcare Analytics</title>
-
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlucoTrend AI Healthcare Analytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
-
 <body>
 
-
 <header class="topbar">
-
     <h1>🩺 GlucoTrend AI Healthcare Analytics</h1>
     <span class="trace-divider">
         <svg viewBox="0 0 900 26" preserveAspectRatio="none" aria-hidden="true">
             <path d="M0,18 L60,18 L85,6 L110,22 L140,10 L170,18 L230,18 L255,4 L280,20 L310,14 L340,18 L410,18 L435,8 L460,20 L495,12 L520,18 L590,18 L615,3 L640,22 L670,9 L700,18 L770,18 L795,7 L820,19 L850,13 L900,18" />
         </svg>
     </span>
-
-
 </header>
 
-
-
-
 <div class="layout">
-
-
-    <!-- Sidebar -->
-
     <nav class="sidebar">
-
-    <ul>
-
-        <li>
-            <a href="{{ url_for('index') }}"
-               class="menu-item {% if active == 'none' %}active{% endif %}">
-                Dashboard
-            </a>
-        </li>
-
-
-        <li>
-            <a href="{{ url_for('data_loading') }}"
-               class="menu-item {% if active == 'data-loading' %}active{% endif %}">
-                Data Loading
-            </a>
-        </li>
-
-
-        <li>
-            <a href="{{ url_for('eda_page') }}"
-               class="menu-item {% if active == 'eda' %}active{% endif %}">
-                Exploratory Data Analysis
-            </a>
-        </li>
-
-
-        <li>
-            <a href="{{ url_for('preprocessing') }}"
-               class="menu-item {% if active == 'preprocessing' %}active{% endif %}">
-                Data Preprocessing
-            </a>
-        </li>
-
-
-        <li>
-            <span class="menu-item disabled">
-                Feature Engineering
-            </span>
-        </li>
-
-
-        <li>
-            <span class="menu-item disabled">
-                Model Training
-            </span>
-        </li>
-
-
-        <li>
-            <span class="menu-item disabled">
-                Prediction
-            </span>
-        </li>
-
-    </ul>
-
-</nav>
-
-
-
-
-
-    <!-- Main Content -->
+        <ul>
+            <li><a href="{{ url_for('index') }}" class="menu-item {% if active == 'none' %}active{% endif %}">Dashboard</a></li>
+            <li><a href="{{ url_for('data_loading') }}" class="menu-item {% if active == 'data-loading' %}active{% endif %}">Data Loading</a></li>
+            <li><a href="{{ url_for('eda_page') }}" class="menu-item {% if active == 'eda' %}active{% endif %}">Exploratory Data Analysis</a></li>
+            <li><a href="{{ url_for('preprocessing') }}" class="menu-item {% if active == 'preprocessing' %}active{% endif %}">Data Preprocessing</a></li>
+            <li><a href="{{ url_for('linear_regression') }}" class="menu-item {% if active == 'linear-regression' %}active{% endif %}">Linear Regression</a></li>
+            <li><a href="{{ url_for('logistic_regression') }}" class="menu-item {% if active == 'logistic-regression' %}active{% endif %}">Logistic Regression</a></li>
+            <li><a href="{{ url_for('decision_tree') }}" class="menu-item {% if active == 'decision-tree' %}active{% endif %}">Decision Tree</a></li>
+            <li><a href="{{ url_for('random_forest') }}" class="menu-item {% if active == 'random-forest' %}active{% endif %}">Random Forest</a></li>
+            <li><a href="{{ url_for('bagging') }}" class="menu-item {% if active == 'bagging' %}active{% endif %}">Bagging</a></li>
+            <li><a href="{{ url_for('boosting') }}" class="menu-item {% if active == 'boosting' %}active{% endif %}">Boosting</a></li>
+        </ul>
+    </nav>
 
     <main class="content">
-
-
         {% if active == 'none' %}
-
-
         <div class="welcome-card dashboard-message">
-
-
-            <h2>
-
-                Welcome to GlucoTrend 🩺
-
-            </h2>
-
-
-
-            <p>
-
-                Please select an option from the left sidebar
-                to view your selected analysis.
-
-            </p>
-
-
-
+            <h2>Welcome to GlucoTrend 🩺</h2>
+            <p>Please select an option from the left sidebar to view your selected analysis or model evaluation.</p>
 
             <div class="instruction-box">
-
-
-                <h3>
-
-                    Available Modules
-
-                </h3>
-
-
+                <h3>Available Modules</h3>
                 <ul>
-
-
-                    <li>
-
-                        📂 Data Loading -
-                        View dataset information and structure
-
-                    </li>
-
-
-                    <li>
-
-                        📊 EDA -
-                        Explore patterns and insights
-
-                    </li>
-
-
-                    <li>
-
-                        ⚙️ Preprocessing -
-                        Prepare data for AI models
-
-                    </li>
-
-
-                    <li>
-
-                        🤖 Model Training -
-                        Build prediction models
-
-                    </li>
-
-
-                    <li>
-
-                        🔮 Prediction -
-                        Predict healthcare outcomes
-
-                    </li>
-
-
+                    <li>📂 <strong>Data Loading</strong> - View dataset information and structure</li>
+                    <li>📊 <strong>EDA</strong> - Explore continuous glucose patterns and clinical correlations</li>
+                    <li>⚙️ <strong>Preprocessing</strong> - MinMax scaling, One-Hot & Ordinal Encoding, Standard Scaling</li>
+                    <li>📈 <strong>Linear Regression</strong> - Predict continuous blood glucose levels (mg/dL)</li>
+                    <li>📊 <strong>Logistic Regression</strong> - Hyperglycemia risk classification</li>
+                    <li>🌳 <strong>Decision Tree</strong> - Rule-based glucose risk classification</li>
+                    <li>🌲 <strong>Random Forest</strong> - Multi-tree ensemble glucose risk model</li>
+                    <li>🎒 <strong>Bagging</strong> - Bootstrap aggregation ensemble model</li>
+                    <li>🚀 <strong>Boosting</strong> - Gradient boosted decision tree model</li>
                 </ul>
-
-
             </div>
-
-
-
         </div>
-
-
         {% endif %}
-
-
-
     </main>
-
-
-
 </div>
 
-
-
-
 </body>
-
 </html>
