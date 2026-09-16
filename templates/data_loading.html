@@ -46,10 +46,17 @@
             <li><a href="{{ url_for('preprocessing') }}" class="menu-item">Data Preprocessing</a></li>
             <li><a href="{{ url_for('linear_regression') }}" class="menu-item">Linear Regression</a></li>
             <li><a href="{{ url_for('logistic_regression') }}" class="menu-item">Logistic Regression</a></li>
-            <li><a href="{{ url_for('decision_tree') }}" class="menu-item">Decision Tree</a></li>
-            <li><a href="{{ url_for('random_forest') }}" class="menu-item">Random Forest</a></li>
-            <li><a href="{{ url_for('bagging') }}" class="menu-item">Bagging</a></li>
-            <li><a href="{{ url_for('boosting') }}" class="menu-item">Boosting</a></li>
+            <li class="tree-menu">
+                <details>
+                    <summary class="menu-item">Tree Based Algorithm</summary>
+                    <ul class="submenu">
+                        <li><a href="{{ url_for('decision_tree') }}" class="menu-item submenu-item">Decision Tree</a></li>
+                        <li><a href="{{ url_for('random_forest') }}" class="menu-item submenu-item">Random Forest</a></li>
+                        <li><a href="{{ url_for('bagging') }}" class="menu-item submenu-item">Bagging</a></li>
+                        <li><a href="{{ url_for('boosting') }}" class="menu-item submenu-item">Boosting</a></li>
+                    </ul>
+                </details>
+            </li>
         </ul>
     </nav>
 
